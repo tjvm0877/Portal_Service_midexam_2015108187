@@ -29,7 +29,6 @@ public class UserDaoTests {
     @Test
     public void get() throws SQLException {
         Integer id = 1;
-
         User user = userDao.findById(id);
         assertThat(user.getId(), is(id));
         assertThat(user.getName(), is(name));

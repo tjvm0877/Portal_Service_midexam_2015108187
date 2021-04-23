@@ -24,14 +24,23 @@ public class DaoFactory {
     private String url;
 
     @Bean
-    public UserDao userDao() throws ClassNotFoundException {
-        return new UserDao(dataSource());
+    public UserDao userDao() {
+        return new UserDao(jdbcContext());
     }
 
     @Bean
-    public DataSource dataSource() throws ClassNotFoundException {
+    public JdbcContext jdbcContext() {
+        return new JdbcContext(dataSource());
+    }
+
+    @Bean
+    public DataSource dataSource() {
         SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
-        dataSource.setDriverClass((Class<? extends Driver>) Class.forName(className));
+        try {
+            dataSource.setDriverClass((Class<? extends Driver>) Class.forName(className));
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         dataSource.setUsername(username);
         dataSource.setPassword(password);
         dataSource.setUrl(url);

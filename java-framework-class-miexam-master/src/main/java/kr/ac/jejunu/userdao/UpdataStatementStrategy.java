@@ -5,10 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class UpdataStatementStrategy implements StatementStrategy {
-    @Override
-    public PreparedStatement makeStatement(Object object, Connection connection) throws SQLException {
-        User user = (User) object;
+    private User user;
+    public UpdataStatementStrategy(User user) {
+        this.user = user;
+    }
 
+    @Override
+    public PreparedStatement makeStatement(Connection connection) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement("update userinfo set name = ?, password = ? where id = ?");
         preparedStatement.setString(1, user.getName());
         preparedStatement.setString(2, user.getPassword());
