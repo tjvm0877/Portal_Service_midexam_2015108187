@@ -6,8 +6,8 @@ public class UserDao {
     public User get(Integer id) throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection connection =
-                DriverManager.getConnection("jdbc:mysql://localhost/jeju?serverTimezone=UTC"
-                , "jeju", "jejupw");
+                DriverManager.getConnection("jdbc:mysql://localhost:3306/portal_service?" +
+                        "characterEncoding=utf-8&serverTimezone=UTC", "jeju","1234");
         PreparedStatement preparedStatement =
                 connection.prepareStatement("select * from userinfo where id = ?");
         preparedStatement.setLong(1, id);
