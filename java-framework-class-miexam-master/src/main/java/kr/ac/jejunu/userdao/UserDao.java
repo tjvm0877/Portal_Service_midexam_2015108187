@@ -10,78 +10,76 @@ public class UserDao {
         this.dataSource = dataSource;
     }
 
-    public User findById(Integer id) throws ClassNotFoundException, SQLException {
+    public User findById(Integer id) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         User user = null;
         try {
-            connection = dataSource.getConnection();preparedStatement =
-            connection.prepareStatement("select * from userinfo where id = ?");
-            preparedStatement.setLong(1, id);
-
+            connection = dataSource.getConnection();
+            preparedStatement = connection.prepareStatement(
+                    "select * from  userinfo where id = ?"
+            );
+            preparedStatement.setInt(1, id);
             resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-
-        if (resultSet.next()) {
-            user = new User();
-            user.setId(resultSet.getInt("id"));
-            user.setName(resultSet.getString("name"));
-            user.setPassword(resultSet.getString("password"));
+            if (resultSet.next()) {
+                user = new User();
+                user.setId(resultSet.getInt("id"));
+                user.setName(resultSet.getString("name"));
+                user.setPassword(resultSet.getString("password"));
             }
         } finally {
             try {
                 resultSet.close();
-            } catch (Exception throwable) {
-                throwable.printStackTrace();
+            } catch (Exception throwables) {
+                throwables.printStackTrace();
             }
             try {
                 preparedStatement.close();
-            } catch (Exception throwable) {
-                throwable.printStackTrace();
+            } catch (Exception throwables) {
+                throwables.printStackTrace();
             }
             try {
                 connection.close();
-            } catch (Exception throwable) {
-                throwable.printStackTrace();
+            } catch (Exception throwables) {
+                throwables.printStackTrace();
             }
-
         }
         return user;
     }
-    public void insert(User user) throws SQLException, ClassNotFoundException {
+    public void insert(User user) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
         try {
-        connection = dataSource.getConnection();
-        preparedStatement = connection.prepareStatement("insert into userinfo(name, password) VALUE (?,?)", Statement.RETURN_GENERATED_KEYS);
-        preparedStatement.setString(1, user.getName());
-        preparedStatement.setString(2, user.getPassword());
-        preparedStatement.executeUpdate();
+            connection = dataSource.getConnection();
+            preparedStatement = connection.prepareStatement(
+                    "insert into userinfo (name, password) values ( ?, ? )"
+                    , Statement.RETURN_GENERATED_KEYS
+            );
+            preparedStatement.setString(1, user.getName());
+            preparedStatement.setString(2, user.getPassword());
 
-        resultSet = preparedStatement.getGeneratedKeys();
-        resultSet.next();
-        user.setId(resultSet.getInt(1));
+            preparedStatement.executeUpdate();
+
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            resultSet.next();
+
+            user.setId(resultSet.getInt(1));
         } finally {
             try {
-                resultSet.close();
-            } catch (Exception throwable) {
-                throwable.printStackTrace();
-            }
-            try {
                 preparedStatement.close();
-            } catch (Exception throwable) {
-                throwable.printStackTrace();
+            } catch (Exception throwables) {
+                throwables.printStackTrace();
             }
             try {
                 connection.close();
-            } catch (Exception throwable) {
-                throwable.printStackTrace();
+            } catch (Exception throwables) {
+                throwables.printStackTrace();
             }
         }
     }
     public void update(User user) throws SQLException {
+        //데이터 어딨어? => mysql
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         try {
@@ -108,7 +106,6 @@ public class UserDao {
         }
 
     }
-
     public void delete(Integer id) throws SQLException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;

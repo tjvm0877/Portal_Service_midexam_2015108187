@@ -16,18 +16,20 @@ import static org.hamcrest.core.Is.is;
 public class UserDaoTests {
     static UserDao userDao;
 
+    String name = "hyun";
+    String password = "1234";
+
     @BeforeAll
-    public static void setUp() {
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(DaoFactory.class);
+    public static void setup() {
+        ApplicationContext applicationContext
+                = new AnnotationConfigApplicationContext(DaoFactory.class);
         userDao = applicationContext.getBean("userDao", UserDao.class);
     }
+
     @Test
-    public void testGet() throws SQLException, ClassNotFoundException {
+    public void get() throws SQLException {
         Integer id = 1;
-        String name = "재현";
-        String password = "1234";
-//        DaoFactory daoFactory = new DaoFactory();
-//        UserDao userDao = daoFactory.getUserDao();
+
         User user = userDao.findById(id);
         assertThat(user.getId(), is(id));
         assertThat(user.getName(), is(name));
@@ -36,15 +38,9 @@ public class UserDaoTests {
 
     @Test
     public void insert() throws SQLException, ClassNotFoundException {
-        String password = "1234";
-        String name = "재현";
-
         User user = new User();
         user.setName(name);
         user.setPassword(password);
-
-//        DaoFactory daoFactory = new DaoFactory();
-//        UserDao userDao = daoFactory.getUserDao();
         userDao.insert(user);
 
         User insertedUser = userDao.findById(user.getId());
@@ -56,16 +52,14 @@ public class UserDaoTests {
     }
 
     @Test
-    public void update() throws SQLException, ClassNotFoundException {
-        String password = "1234";
-        String name = "재현";
+    public void update() throws SQLException {
 
         User user = new User();
         user.setName(name);
         user.setPassword(password);
         userDao.insert(user);
 
-        user.setName("김재현");
+        user.setName("hyun");
         user.setPassword("1234");
 
         userDao.update(user);
@@ -78,9 +72,7 @@ public class UserDaoTests {
     }
 
     @Test
-    public void delete() throws SQLException, ClassNotFoundException {
-        String password = "1234";
-        String name = "재현";
+    public void delete() throws SQLException {
 
         User user = new User();
         user.setName(name);
